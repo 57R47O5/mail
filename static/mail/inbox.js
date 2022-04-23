@@ -8,6 +8,33 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // By default, load the inbox
   load_mailbox('inbox');
+
+  // Enviamos el form cuando se pulsa el buton ¨submit¨
+  //document.querySelector('#submit-compose').addEventListener('click', ()=>enviar());
+  // Recibimos el form cuando se envia 
+  document.querySelector('#compose-form').onsubmit = () => {
+    const destinatarios = document.querySelector('#compose-recipients').value;  
+    const titulo = document.querySelector('#compose-subject').value;
+    const cuerpo = document.querySelector('#compose-body').value;
+    //Hasta aca todo bien
+
+    fetch('/emails',{
+      method: 'POST',
+      body: JSON.stringify({
+        recipients: destinatarios,
+        subject: titulo,
+        body: cuerpo
+      })
+    })
+    .then(response => response.json())
+    .then(result=>{
+      console.log(result);
+    })
+
+
+    return false;
+  }
+
 });
 
 function compose_email() {
